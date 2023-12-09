@@ -1,0 +1,121 @@
+create DATABASE  appai;
+USE appai;
+
+-- Tabla Cliente
+CREATE TABLE  Cliente (
+    ClienteID INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    apellidoPaterno VARCHAR(50) NOT NULL,
+    apellidoMaterno VARCHAR(50),
+    created_at DATETIME,
+    updated_at DATETIME NULL,
+    deleted_at DATETIME NULL
+);
+
+INSERT INTO Cliente (nombre, apellidoPaterno, apellidoMaterno, created_at)
+VALUES
+    ('Juan', 'Perez', 'Gomez', NOW()),
+    ('Maria', 'Lopez', 'Martinez', NOW()),
+    ('Carlos', 'Garcia', 'Fernandez', NOW()),
+    ('Ana', 'Rodriguez', 'Hernandez', NOW()),
+    ('Pedro', 'Martinez', 'Lopez', NOW()),
+    ('Laura', 'Fernandez', 'Gonzalez', NOW()),
+    ('Diego', 'Hernandez', 'Perez', NOW()),
+    ('Sofia', 'Gomez', 'Rodriguez', NOW()),
+    ('Miguel', 'Gonzalez', 'Sanchez', NOW()),
+    ('Elena', 'Sanchez', 'Garcia', NOW());
+
+-- Tabla PaquetesMusicales
+CREATE TABLE  PaquetesMusicales (
+    PaqueteID INT PRIMARY KEY AUTO_INCREMENT,
+    tipoPaquete VARCHAR(255),
+    created_at DATETIME,
+    updated_at DATETIME NULL,
+    deleted_at DATETIME NULL
+);
+
+INSERT INTO PaquetesMusicales (tipoPaquete, created_at) VALUES ('Chico', NOW());
+INSERT INTO PaquetesMusicales (tipoPaquete, created_at) VALUES ('Mediano', NOW());
+INSERT INTO PaquetesMusicales (tipoPaquete, created_at) VALUES ('Grande', NOW());
+INSERT INTO PaquetesMusicales (tipoPaquete, created_at) VALUES ('Chico', NOW());
+INSERT INTO PaquetesMusicales (tipoPaquete, created_at) VALUES ('Mediano', NOW());
+
+-- Tabla DatosUbicacion
+CREATE TABLE DatosUbicacion (
+    UbicacionID INT PRIMARY KEY AUTO_INCREMENT,
+    Localidad VARCHAR(50) NOT NULL,
+    Municipio VARCHAR(50) NOT NULL,
+    EstadoFederativo VARCHAR(50) NOT NULL,
+    DiaEvento VARCHAR(50) NOT NULL,
+    HoraEvento VARCHAR(50) NOT NULL,
+    created_at DATETIME,
+    updated_at DATETIME NULL,
+    deleted_at DATETIME NULL,
+    ClienteID INT,
+    FOREIGN KEY (ClienteID) REFERENCES Cliente(ClienteID)
+);
+
+INSERT INTO DatosUbicacion (Localidad, Municipio, EstadoFederativo, DiaEvento, HoraEvento, created_at, ClienteID)
+VALUES
+    ('Localidad1', 'Municipio1', 'Estado1', 'sabado 13 de mayo 2023', '8pm', NOW(), 1),
+    ('Localidad2', 'Municipio2', 'Estado2', 'sabado 27 de mayo 2023', '7pm', NOW(), 2),
+    ('Localidad3', 'Municipio3', 'Estado3', 'sabado 3 de junio 2023', '6pm', NOW(), 3),
+    ('Localidad4', 'Municipio4', 'Estado4', 'sabado 10 de junio 2023', '9pm', NOW(), 4),
+    ('Localidad5', 'Municipio5', 'Estado5', 'sabado 15 de julio 2023', '8pm', NOW(), 5),
+    ('Localidad6', 'Municipio6', 'Estado6', 'sabado 13 de mayo 2023', '9pm', NOW(), 6),
+    ('Localidad7', 'Municipio7', 'Estado7', 'sabado 13 de mayo 2023', '7pm', NOW(), 7),
+    ('Localidad8', 'Municipio8', 'Estado8', 'sabado 13 de mayo 2023', '7pm', NOW(), 8),
+    ('Localidad9', 'Municipio9', 'Estado9', 'sabado 13 de mayo 2023', '8pm', NOW(), 9),
+    ('Localidad10', 'Municipio10', 'Estado10', 'sabado 13 de mayo 2023', '8pm', NOW(), 10);
+
+-- Tabla DatosContrato
+CREATE TABLE  DatosContrato (
+    ContratoID INT PRIMARY KEY AUTO_INCREMENT,
+    ClienteID INT,
+    UbicacionID INT,
+    FechaContrato DATE,
+    created_at DATETIME,
+    updated_at DATETIME NULL,
+    deleted_at DATETIME NULL,
+    FOREIGN KEY (ClienteID) REFERENCES Cliente(ClienteID),
+    FOREIGN KEY (UbicacionID) REFERENCES DatosUbicacion(UbicacionID)
+);
+INSERT INTO DatosContrato (ClienteID, UbicacionID, FechaContrato, created_at)
+VALUES
+    (1, 1, '2023-05-10', NOW()),   -- Contrato 1
+    (2, 2, '2023-05-15', NOW()),   -- Contrato 2
+    (3, 3, '2023-06-01', NOW()),   -- Contrato 3
+    (4, 4, '2023-06-08', NOW()),   -- Contrato 4
+    (5, 5, '2023-07-15', NOW()),   -- Contrato 5
+    (6, 6, '2023-05-10', NOW()),   -- Contrato 6
+    (7, 7, '2023-05-10', NOW()),   -- Contrato 7
+    (8, 8, '2023-05-10', NOW()),   -- Contrato 8
+    (9, 9, '2023-05-10', NOW()),   -- Contrato 9
+    (10, 10, '2023-05-10', NOW()); -- Contrato 10
+
+
+-- Tabla DatosPublicidad
+CREATE TABLE DatosPublicidad (
+    PublicidadID INT PRIMARY KEY AUTO_INCREMENT,
+    ContratoID INT,
+    NombreAnfitrion VARCHAR(50),
+    MotivoEvento VARCHAR(255),
+    LugarPopular VARCHAR(100),
+    created_at DATETIME,
+    updated_at DATETIME NULL,
+    deleted_at DATETIME NULL,
+    FOREIGN KEY (ContratoID) REFERENCES DatosContrato(ContratoID)
+);
+
+INSERT INTO DatosPublicidad (ContratoID, NombreAnfitrion, MotivoEvento, LugarPopular, created_at)
+VALUES
+    (1, 'Anfitrion1', '15 años', 'salon casa blanca', NOW()),
+    (2, 'Anfitrion2', 'festejo', 'auditorio', NOW()),
+    (3, 'Anfitrion3', 'festejo', 'salon azucenas', NOW()),
+    (4, 'Anfitrion4', '15 años', 'auditorio', NOW()),
+    (5, 'Anfitrion5', 'boda', 'casa de la familia martinez', NOW()),
+    (6, 'Anfitrion6', 'festejo', 'salon la ganadera', NOW()),
+    (7, 'Anfitrion7', '15 años', 'casa de la familia hernandez', NOW()),
+    (8, 'Anfitrion8', 'boda', 'auditorio', NOW()),
+    (9, 'Anfitrion9', 'bautizo', 'salon la terraza', NOW()),
+    (10, 'Anfitrion10', 'bautizo', 'auditorio', NOW());
